@@ -55,16 +55,21 @@ def cadastrar_cliente():
 
 
 def exportar_cliente():
-    pass   
+    conexao = sqlite3.connect('bancos_clientes.db') 
+    cursor = conexao.cursor()
+    cursor.execute("SELECT nome, email, telefone FROM clientes")
+    clientes_db = cursor.fetchall()
+    clientes_db = pd.DataFrame(clientes_db, columns=["Nome","E-mail","Telefone"])
+    clientes_db.to_excel('BANCO DE DADOS DE CLIENTES.xlsx', index=False)  # Remova o índice (ID)
+    conexao.commit()
+    conexao.close()
+
 
 
 janela = tk.Tk()
 janela.title('CADASTRO DE CLIENTES')
 
 #IDENTIFICAÇÃO DAS ENTRADAS
-
-
-
 label_nome = tk.Label(janela, text='Nome')
 label_nome.grid(row=0, column=0, padx=10, pady=10)
 
@@ -75,7 +80,6 @@ label_telefone = tk.Label(janela, text='Telefone')
 label_telefone.grid(row=2, column=0, padx=10, pady=10)
 
 #ENTRADAS
-
 label_mensagem = tk.Label(janela, text='')
 label_mensagem.grid(row=5, column=0, columnspan=2, padx=10, pady=10, sticky='ew')
 
